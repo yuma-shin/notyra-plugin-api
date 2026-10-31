@@ -1,0 +1,26 @@
+{
+  "apiVersion": "3.1.7",
+  "repository": "https://github.com/yuma-shin/notyra",
+  "packageRepository": "https://github.com/yuma-shin/notyra-plugin-api",
+  "dependencies": {
+    "semver": "7.8.5"
+  },
+  "peerDependencies": {
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@codemirror/state": "^6.7.6",
+    "@codemirror/view": "^6.43.15",
+    "@codemirror/language": "^6.13.1",
+    "@codemirror/commands": "^6.11.1",
+    "@lezer/highlight": "^1.2.5"
+  },
+  "files": {
+    "src/api.ts": "42a4d3195c3a9e0bd3a5e8bf59c936592fb1e8492e93ac24ca3507ba9f738ce7",
+    "src/notes.ts": "1d5675746551c1688af8f37566b98bfdbae98726112dcae213b1bbd15ce0ad61",
+    "src/types.ts": "8d6b06a06a90bfec92e4ea6e198384bd9fc6230987e64bb3c7050a93e0506d8f",
+    "src/manifest.ts": "81b8d15e1fe8f353ba1f9d5c0de09e4c2dbd4d427ebc02944435801c0ee724b7",
+    "src/index.ts": "4df9d5ce02bf1d6f267659b4c25f3d6cebf492b42af09667ec6fda0a43e9a018"
+  }
+}
