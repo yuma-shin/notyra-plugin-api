@@ -46,25 +46,13 @@ pnpm plugins:export-api ../notyra-plugin-api
 
 本体が API の正本です。生成後は `api-source.json` と package.json のバージョン・依存関係を揃え、ビルド結果も一緒にコミットします。本体の生成コマンドは、このリポジトリの README・package.json・公開設定を上書きしません。API の版は本体の Plugin API の版と一致させます。
 
-## First npm publication / 初回公開
+## npm setup / npm 側の事前準備
 
-The npm organization must grant the publishing account access to the `@notyra` scope. After merging the package source and validating the payload, sign in interactively on your own machine:
+Publishing happens from GitHub Releases using OIDC. According to npm's [trust prerequisites](https://docs.npmjs.com/cli/v12/commands/npm-trust/#prerequisites), a package must already exist on npm before its Trusted Publisher can be configured. A new GitHub repository and npm organization alone are insufficient. Creating the package initially is a separate bootstrap step; this workflow cannot create an entirely new npm package using unconfigured OIDC. Complete that setup before publishing a Release.
 
-```sh
-npm login --scope=@notyra --registry=https://registry.npmjs.org/
-npm whoami
-pnpm install --frozen-lockfile
-pnpm build
-pnpm test
-npm pack --dry-run
-npm publish --access public
-```
+公開は GitHub Releases と OIDC を使います。ただし npm の現行仕様では Trusted Publisher の設定対象パッケージが既に存在する必要があります。完全に未作成の npm パッケージの初回作成は事前準備として別途必要です。organization の作成だけでは設定・初回公開は完了しません。この制約を解消してから Release を公開してください。
 
-Authentication and any 2FA confirmation are entered directly into npm's login flow. Creating the GitHub repository or npm organization alone does not publish the package. Verify with `npm view @notyra/plugin-api@3.1.7 version` before switching consumers to npm.
-
-## Later releases with OIDC
-
-Configure an npm [Trusted Publisher](https://docs.npmjs.com/trusted-publishers/) for this package:
+Configure an npm [Trusted Publisher](https://docs.npmjs.com/trusted-publishers/):
 
 - GitHub owner: `yuma-shin`
 - Repository: `notyra-plugin-api`
@@ -72,6 +60,13 @@ Configure an npm [Trusted Publisher](https://docs.npmjs.com/trusted-publishers/)
 - Environment: leave blank
 - Allow direct **npm publish** (new publisher configurations may allow only staged publication by default)
 
-Push a tag matching the package version, for example `v3.1.8` after synchronizing that API version. `.github/workflows/publish.yml` validates sources, builds/tests the package, and publishes publicly with provenance using GitHub OIDC. It does not require an npm token in repository secrets. The workflow uses Node 24 and npm 12.2.1, above npm's OIDC minimum requirements. Do not tag an already published version.
+## Release / リリース
 
-初回公開後、npm 側で上記の Trusted Publisher を設定します。以降は API と同じバージョンのタグで検証・公開できます。未設定のままタグを push しても公開は認証エラーになります。
+1. Merge the API change and generated outputs into **main**.
+2. Create a version tag matching package.json, such as **v3.1.7**, on that main commit.
+3. Publish a stable **GitHub Release** for that tag.
+4. `.github/workflows/publish.yml` builds/tests and publishes with GitHub OIDC and provenance.
+
+A tag push alone does not publish. Draft releases, prereleases, mismatched versions and commits outside main cannot publish. No npm token or local npm login is used by the workflow. Node 24 and npm 12.2.1 satisfy npm's OIDC requirements. Verify `npm view @notyra/plugin-api@3.1.7 version` before switching consumers to the exact npm version. Never release a version that already exists on npm.
+
+**main にマージ → main 上のコミットへバージョンタグ → 正式な GitHub Release を公開 → OIDC で npm 公開**の順です。タグを push しただけでは公開しません。パッケージの版とタグが一致し、リリースのコミットが main に含まれることを検証します。トークンを GitHub Secrets に保存する必要はありません。npm 側の事前設定がない場合は公開に失敗します。
