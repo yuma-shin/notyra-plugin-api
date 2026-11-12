@@ -13,9 +13,9 @@
   "bugs": {
     "url": "https://github.com/yuma-shin/notyra-plugin-api/issues"
   },
-  "packageManager": "pnpm@12.16.0",
+  "packageManager": "pnpm@12.18.0",
   "engines": {
-    "node": ">=24.22.2"
+    "node": ">=26.13.0"
   },
   "files": [
     "*.d.ts",
@@ -44,7 +44,7 @@
     "prepack": "pnpm build && pnpm test"
   },
   "dependencies": {
-    "semver": "7.8.5"
+    "semver": "7.8.6"
   },
   "peerDependencies": {
     "react": "^19.3.1",
@@ -60,7 +60,7 @@
   "devDependencies": {
     "typescript": "7.0.2",
     "@types/semver": "7.8.0",
-    "@types/node": "26.6.5"
+    "@types/node": "26.6.6"
   },
   "publishConfig": {
     "access": "public",
